@@ -1,0 +1,145 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kairos"
+version = "0.1.0"
+description = "AI/ML Cost Intelligence Layer - Real-time GPU cost tracking for Jupyter notebooks"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Kairos Team", email = "team@usekairos.ai"}
+]
+maintainers = [
+    {name = "Kairos Team", email = "team@usekairos.ai"}
+]
+keywords = [
+    "machine-learning",
+    "deep-learning",
+    "gpu",
+    "cost-tracking",
+    "jupyter",
+    "mlops",
+    "finops",
+    "nvidia",
+    "pytorch",
+    "tensorflow",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Monitoring",
+    "Framework :: Jupyter",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "ipython>=7.0.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "pynvml>=11.0.0,<13.0.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+    "pynvml>=11.0.0,<13.0.0",
+]
+all = [
+    "kairos[gpu,dev]",
+]
+
+[project.urls]
+Homepage = "https://usekairos.ai"
+Documentation = "https://docs.usekairos.ai"
+Repository = "https://github.com/usekairos/kairos"
+Issues = "https://github.com/usekairos/kairos/issues"
+Changelog = "https://github.com/usekairos/kairos/blob/main/CHANGELOG.md"
+
+[project.scripts]
+kairos = "kairos.cli:main"
+
+[tool.setuptools]
+packages = ["kairos"]
+package-dir = {"" = "."}
+
+[tool.setuptools.package-data]
+kairos = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # Pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+show_column_numbers = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "gpu: marks tests as requiring GPU (deselect with '-m \"not gpu\"')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[tool.coverage.run]
+source = ["kairos"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
